@@ -1,5 +1,5 @@
 import multiprocessing
-from mqtt2 import server_process
+from legacy.mqtt2 import server_process
 from GUI import ui_process
 
 if __name__ == "__main__":

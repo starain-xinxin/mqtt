@@ -266,12 +266,12 @@ def sub_cb(topic, msg):
                         path_id = 1
                     data["path-id"] = path_id
                 data["command-type"] = "ack_init"
-                c.publish(b"data", ujson.dumps(data))
+                c.publish(b"server", ujson.dumps(data))
 
             # 2. 处理 tasks 信息
             if "command-type" in data and data["command-type"] == "task":
                 data["command-type"] = "ack_task"
-                c.publish(b"data", ujson.dumps(data))
+                c.publish(b"server", ujson.dumps(data))
                 # print("Published response:", data)
                 tasks_list = data["tasks"]
                 global m
@@ -280,7 +280,7 @@ def sub_cb(topic, msg):
             # 3. 处理 stop 信息
             if "command-type" in data and data["command-type"] == "stop":
                 data["command-type"] = "ack_stop"
-                c.publish(b"data", ujson.dumps(data))
+                c.publish(b"server", ujson.dumps(data))
                 tasks_list = data["tasks"]
                 global m
                 m = tasks_list
@@ -302,7 +302,7 @@ def send_message(message_dict, command_type = "car-message"):
     send_data = {}
     send_data["command-type"] = command_type
     send_data = send_data | message_dict
-    c.publish(b"data", ujson.dumps(send_data))
+    c.publish(b"server", ujson.dumps(send_data))
 
     
 # 1. 联网
@@ -315,7 +315,7 @@ except:
 # 2. 创建mqtt客户端
 m = []  # 任务列表
 path_id = 1  # 路径ID
-c = MQTTClient("umqtt_client", "192.168.3.28")  # 建立一个MQTT客户端
+c = MQTTClient("umqtt_client", "10.223.47.2")  # 建立一个MQTT客户端
 c.set_callback(sub_cb)  # 设置回调函数
 c.connect()  # 建立连接
 c.subscribe(b"data") 

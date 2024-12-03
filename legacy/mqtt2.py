@@ -27,7 +27,7 @@ def on_message(client, userdata, msg):
         # 2. 接收到任务回复指令，打印回复
         if message['command-type'] == 'ack_task':
             print(f"[Received][time:{datetime.now()}][topic {msg.topic}][type:{message['command-type']}]: {message}")
-            print(f"[log] 小车正在路径上行进...")
+            print(f"[log] 小车正在路径{message['path-id']}上行进...")
         # 3. 接收到停止回复指令，打印回复
         if message['command-type'] == 'ack_stop':
             print(f"[Received][time:{datetime.now()}][topic {msg.topic}][type:{message['command-type']}]: {message}")
@@ -63,6 +63,7 @@ def send_task(path_id = 1):
     message_payload = {
         "command-type": "task",
         "tasks": ['straight', 'left', 'right', 'left', 'straight', 'right'],
+        "path-id": path_id,
     }
     message_payload["tasks"] = car_path[path_id]
     send_message(mqttc, "data", message_payload)
